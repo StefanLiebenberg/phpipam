@@ -7,6 +7,8 @@ ENV PHPMAILER_SOURCE https://github.com/PHPMailer/PHPMailer/
 ARG PHPMAILER_VERSION=6.7.1
 ENV PHPSAML_SOURCE https://github.com/onelogin/php-saml/
 ARG PHPSAML_VERSION=3.4.1
+ENV XMLSECLIBS_SOURCE https://github.com/robrichards/xmlseclibs
+ARG XMLSECLIBS_VERSION=3.0.4
 ENV WEB_REPO /var/www/html
 
 # Install required deb packages
@@ -55,6 +57,10 @@ ADD ${PHPMAILER_SOURCE}/archive/v${PHPMAILER_VERSION}.tar.gz /tmp/
 RUN tar -xzf /tmp/v${PHPMAILER_VERSION}.tar.gz -C ${WEB_REPO}/functions/PHPMailer/ --strip-components=1
 ADD ${PHPSAML_SOURCE}/archive/refs/tags/${PHPSAML_VERSION}.tar.gz /tmp/
 RUN tar -xzf /tmp/${PHPSAML_VERSION}.tar.gz -C ${WEB_REPO}/functions/php-saml/ --strip-components=1
+
+ADD ${XMLSECLIBS_SOURCE}/archive/refs/tags/${XMLSECLIBS_VERSION}.tar.gz /tmp/xmlseclibs-${XMLSECLIBS_VERSION}.tar.gz
+RUN tar -xzf /tmp/xmlseclibs-${XMLSECLIBS_VERSION}.tar.gz -C ${WEB_REPO}/functions/xmlseclibs/ --strip-components=1 && \
+        chmod +rx -R ${WEB_REPO}/functions/xmlseclibs/
 
 # Use system environment variables into config.php
 ENV PHPIPAM_BASE /
